@@ -1,0 +1,33 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@headlessui/react": "^1.4.2",
+        "@inertiajs/react": "^1.0.11",
+        "@tailwindcss/forms": "^0.5.3",
+        "@vitejs/plugin-react": "^4.0.3",
+        "autoprefixer": "^10.4.12",
+        "axios": "^1.6.2",
+        "daisyui": "^3.7.5",
+        "hint": "^2.0.0",
+        "laravel-vite-plugin": "^0.8.0",
+        "postcss": "^8.4.18",
+        "postcss-import": "^15.1.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "tailwindcss": "^3.2.1",
+        "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "@inertiajs/inertia": "^0.11.1",
+        "@inertiajs/inertia-react": "^0.8.1",
+        "chart.js": "^4.4.0",
+        "react-google-charts": "^4.0.1",
+        "react-icons": "^4.11.0",
+        "xlsx": "^0.18.5"
+    }
+}
