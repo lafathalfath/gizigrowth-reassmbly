@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LokasiController;
 use App\Http\Controllers\PetaController;
 use App\Models\Activity;
+use App\Models\DownloadHistory;
 use App\Models\Feedback;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -57,7 +58,7 @@ Route::get('/gpoint', [GpointController::class, 'index'])->name('gpoint');
 // gibot
 Route::get('/gibot', [GibotController::class, 'index'])->name('gibot');
 Route::get('/gibot/chat', [GibotController::class, 'chat']);
-Route::get('/api/search', [GibotController::class, 'search']);
+Route::post('/api/search', [GibotController::class, 'search']);
 //gibot
 
 // About 
@@ -83,10 +84,16 @@ Route::post('/contact/feedback', function (Request $request){
 
 // Route::get('/dashboard', [DashboardController::class, 'member'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/dashboard', function(){
+    $user = Auth::user();
+    $history = DownloadHistory::where('id_user', $user->id)->get();
+    // dd($history);
     if(isAdmin()){
         return redirect('/admin/dashboard');
     }else{
-        return Inertia::render('Dashboard');
+        return Inertia::render('Dashboard', [
+            'user' => $user,
+            'download_history' => $history
+        ]);
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -155,6 +162,16 @@ Route::middleware(['auth', 'admin'])->group(function (){
     //activity
     Route::get('/activity', [ActivityController::class, 'index']);
     //end activity
+    Route::get('/download-history', function(){
+        $user = Auth::user();
+        $table = new DownloadHistory();
+        $table = $table->where('id_user', $user->id)->get();
+        // dd($table);
+        return Inertia::render('DownloadHistory', [
+            'user' => $user,
+            'download_history' => $table,
+        ]);
+    });
 });
 
 

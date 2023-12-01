@@ -1,25 +1,33 @@
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import NavBar from "../NavigationBar";
 import { FaChevronLeft } from "react-icons/fa";
-import { IoSend } from "react-icons/io5";
-import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { IoMdSend } from "react-icons/io";
 import { Inertia } from "@inertiajs/inertia";
+import axios from "axios";
 
 const Chat=(props)=>{
+    // const {bardApiUrl} = usePage().props;
+    // const [bardData, setBardData] = useState();
+    // useEffect(()=>{
+    //     axios.get(bardApiUrl)
+    //         .then(response => setBardData(response.data))
+    //         .catch(error => console.error('Error fetching data:', error));
+    // }, [bardApiUrl]);
 
     const [query, setQuery] = useState('');
-    const [searchResult, setSearchResult] = useState([]);
-
+    const [searchResult, setSearchResult] = useState('');
+    console.log(searchResult);
     const handleSearch=async()=>{
         try{
-            const response = Inertia.get('/api/search', {params: {query}});
-            setSearchResult(response.data.item);
-        } catch (error){
-            console.error('Error Searching: ', error);
+            const response = await axios.post('/api/search', {message: query});
+            setSearchResult(response.data.response);
+        }catch (error) {
+            console.error(error);
         }
     }
-    console.log(searchResult);
+    // console.log(searchResult);
+    console.log(query);
     return <>
         <Head title="Chat | GiBot"/>
         <div className="fixed w-full z-50">
@@ -42,15 +50,13 @@ const Chat=(props)=>{
                         onChange={(e)=>setQuery(e.target.value)}
                     />
                     <button className="text-xl">
-                        <IoSend className="text-zinc-700"/>
+                        <IoMdSend className="text-zinc-700"/>
                     </button>
                 </form>
             </div>
             <div className="mx-5 mt-12 pt-5 min-h-[80vh]">
-                {searchResult && searchResult.map((result)=>{
-                    <Link href={result.link} className="w-96 h-40 bg-white mb-5" key={result.link}>{result.title}</Link>
-                })}
-                <path xmlns="http://www.w3.org/2000/svg" d="M0,999.75118L0,0L999.75118,0L999.75118,999.75118L0,999.75118z"/>
+                {searchResult}
+                {/* <path xmlns="http://www.w3.org/2000/svg" d="M0,999.75118L0,0L999.75118,0L999.75118,999.75118L0,999.75118z"/> */}
             </div>
         </div>
     </>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataStunting;
+use App\Models\DownloadHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -80,6 +81,10 @@ class DownloadController extends Controller
             
             
             // dd($filePath);
+            DownloadHistory::create([
+                'id_user' => Auth::user()->id,
+                'dataset_name' => substr($filename, 0, -4)
+            ]);
             return response()->download($filePath)->deleteFileAfterSend();
             // return response()->download($filePath);
         }else{

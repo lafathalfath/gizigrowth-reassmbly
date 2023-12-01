@@ -26,26 +26,18 @@ class GibotController extends Controller
             return redirect('/login');
         }
     }
-    public function search(Request $request){
-        $query = $request->input('query');
-        // dd($query);
-        if($query){
-            $apiKey = env('GOOGLE_API_KEY');
-            $cx = env('GOOGLE_CX');
+    public function search(){
+        $gptApiKey = env('CHATGPT_API_KEY');
+        $response = Http::post('https://api.openai.com/v1/chat/completions',[
+            'messages' => [['role' => 'system', 'content' => 'You are a helpful assistant.']],
+            'max_tokens' => 150,
+            'temperature' => 0.7,
+        ], [
+            'Authorization' => 'Bearer ' . $gptApiKey,
+        ]);
+        $result = $response->json();
 
-            $response = Http::get('https://www.googleapis.com/customsearch/v1?'.[
-                'key' => $apiKey,
-                'cx' => $cx,
-                'q' => $query
-            ]);
-
-            // $response = Http::get('https://www.googleapis.com/customsearch/v1?key='.$apiKey
-            //     .'&cx='.$cx
-            //     .'&q='.$query
-            // );
-
-            return $response->json();
-        }
-        return response()->json(['items' => []]);
+        return response()->json(['response' => $result['choices'][0]['message']['content']]);
     }
+
 }
